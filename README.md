@@ -1,1 +1,3 @@
-# payment_stripe_subscription
+# stripe_app
+
+A new Flutter project.
