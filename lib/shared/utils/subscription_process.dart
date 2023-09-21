@@ -1,16 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:stripe_app/shared/utils/api_service.dart';
+
+import '../../main.dart';
 
 // +++++++++++++++++++++++++++++++++++
 // ++ STRIPE PAYMENT INITIALIZATION ++
 // +++++++++++++++++++++++++++++++++++
 
-Future<bool> getStatusSubscription(
-    {String customerId = 'cus_OfhAsLpG3T5YhC',
-    String priceId = 'price_1Ns0zrCnpXbCFE1yo4vEmBNp'}) async {
+initPayment()  {
+  print("mkldsmflksdmfldsmfklds111111111");
+  Stripe.publishableKey = STRIPE_PUBLISHABLE_KEY;
+  print("mkldsmflksdmfldsmfklds");
+}
+
+Future<bool> getStatusSubscription({String customerId = 'cus_OfhAsLpG3T5YhC',
+  String priceId = 'price_1Ns0zrCnpXbCFE1yo4vEmBNp'}) async {
   final listSub = await apiService(
     endpoint: 'subscriptions?status=active&customer=$customerId&price=$priceId',
     requestMethod: ApiServiceMethodType.get,
@@ -34,15 +39,14 @@ Future<String> getListPrice() async {
   return '';
 }
 
-Future<void> createPayment(
-    {String titleAction = 'Subscribe \$10.00',
-    String merchantName = 'Flutter Stripe Store Demo',
-    String nickName = 'Gabriel Parada',
-    String email = 'thutest11@demo.com',
-    String description = 'Flutter created',
-    String price = 'price_1Ns0zrCnpXbCFE1yo4vEmBNp',
-    String trialDay = "30",
-    Function? callBack}) async {
+Future<void> createPayment({String titleAction = 'Subscribe \$10.00',
+  String merchantName = 'Flutter Stripe Store Demo',
+  String nickName = 'Gabriel Parada',
+  String email = 'thutest11@demo.com',
+  String description = 'Flutter created',
+  String price = 'price_1Ns0zrCnpXbCFE1yo4vEmBNp',
+  String trialDay = "30",
+  Function? callBack}) async {
   Map<String, dynamic> customer = await createCustomer(
       email: email, nickName: nickName, description: description);
   Map<String, dynamic> paymentIntent = await createPaymentIntent(
@@ -54,7 +58,7 @@ Future<void> createPayment(
       customerId: customer['id'],
       paymentIntentClientSecret: paymentIntent['client_secret']);
   Map<String, dynamic> customerPaymentMethods =
-      await getCustomerPaymentMethods(customerId: customer['id']);
+  await getCustomerPaymentMethods(customerId: customer['id']);
   await updateCustomer(
       customerId: customer['id'],
       paymentId: customerPaymentMethods['data'][0]['id']);
@@ -69,14 +73,13 @@ Future<void> createPayment(
   callBack?.call(customer['id'], sub["id"]);
 }
 
-Future<void> updatePayment(
-    {String customerId = '',
-    String titleAction = 'Subscribe \$10.00',
-    String merchantName = 'Flutter Stripe Store Demo',
-    String price = 'price_1Ns0zrCnpXbCFE1yo4vEmBNp',
-    String trialDay = "30",
-    String subscriptionId = "",
-    Function? callBack}) async {
+Future<void> updatePayment({String customerId = '',
+  String titleAction = 'Subscribe \$10.00',
+  String merchantName = 'Flutter Stripe Store Demo',
+  String price = 'price_1Ns0zrCnpXbCFE1yo4vEmBNp',
+  String trialDay = "30",
+  String subscriptionId = "",
+  Function? callBack}) async {
   Map<String, dynamic> paymentIntent = await createPaymentIntent(
     customerId,
   );
@@ -87,7 +90,7 @@ Future<void> updatePayment(
       customerId: customerId,
       paymentIntentClientSecret: paymentIntent['client_secret']);
   Map<String, dynamic> customerPaymentMethods =
-      await getCustomerPaymentMethods(customerId: customerId);
+  await getCustomerPaymentMethods(customerId: customerId);
   await updateCustomer(
       customerId: customerId,
       paymentId: customerPaymentMethods['data'][0]['id']);
@@ -190,11 +193,10 @@ Future<Map<String, dynamic>> getCustomerPaymentMethods({
 // ++ CREATE SUBSCRIPTION ++
 // +++++++++++++++++++++++++
 
-Future<Map<String, dynamic>> createSubscription(
-    {String customerId = '',
-    String paymentId = '',
-    String price = '',
-    String trialDay = ""}) async {
+Future<Map<String, dynamic>> createSubscription({String customerId = '',
+  String paymentId = '',
+  String price = '',
+  String trialDay = ""}) async {
   final subscriptionCreationResponse = await apiService(
     endpoint: 'subscriptions',
     requestMethod: ApiServiceMethodType.post,
@@ -209,9 +211,7 @@ Future<Map<String, dynamic>> createSubscription(
   return subscriptionCreationResponse!;
 }
 
-Future<Map<String, dynamic>> cancelSubscription(
-  String subscriptionId,
-) async {
+Future<Map<String, dynamic>> cancelSubscription(String subscriptionId,) async {
   final subscriptionCreationResponse = await apiService(
     endpoint: 'subscriptions/$subscriptionId',
     requestMethod: ApiServiceMethodType.delete,

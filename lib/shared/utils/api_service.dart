@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+
+import '../../main.dart';
 
 enum ApiServiceMethodType {
   get,
@@ -13,7 +14,7 @@ enum ApiServiceMethodType {
 const baseUrl = 'https://api.stripe.com/v1';
 final Map<String, String> requestHeaders = {
   'Content-Type': 'application/x-www-form-urlencoded',
-  'Authorization': 'Bearer ${dotenv.env['STRIPE_PRIVATE_KEY']}',
+  'Authorization': 'Bearer $STRIPE_PRIVATE_KEY',
 };
 
 Future<Map<String, dynamic>?> apiService({

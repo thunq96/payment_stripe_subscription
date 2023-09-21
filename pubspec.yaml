@@ -9,9 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_dotenv: ^5.1.0
   flutter_stripe: ^9.4.0
-  http: ^1.1.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:
